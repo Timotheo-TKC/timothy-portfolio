@@ -37,6 +37,33 @@ const updateNavState = () => {
 updateNavState();
 window.addEventListener('scroll', updateNavState, { passive: true });
 
+const navToggle = document.querySelector('.site-nav__toggle');
+const navLinksDrawer = document.querySelector('#nav-links');
+
+if (navToggle && navLinksDrawer) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinksDrawer.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    navToggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+  });
+
+  navLinksDrawer.querySelectorAll('.site-nav__link').forEach((link) => {
+    link.addEventListener('click', () => {
+      navLinksDrawer.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open navigation');
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (nav && !nav.contains(event.target) && navLinksDrawer.classList.contains('is-open')) {
+      navLinksDrawer.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open navigation');
+    }
+  });
+}
+
 const sections = document.querySelectorAll('section[id]');
 const sectionLinkMap = new Map();
 
